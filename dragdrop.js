@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	var currentFile = null;
+	var currentFileName = "";
 	var selectedAnimation = null;
 	var img = new Image();
 	var animating = 0;
@@ -104,10 +105,13 @@ $(document).ready(function() {
 				var canvas = $('#display').get(0);
 				currentFile = new Animations(canvas);
 				currentFile.load(evt.target.result);
+				$("#xml-drop-area").html("Current File: " + currentFileName);
 			} 
 		})(file); 
 
 		reader.readAsText(file); 
+		
+		currentFileName = file.name;
 		
 		clearPreview();
 	}
