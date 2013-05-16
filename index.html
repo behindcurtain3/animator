@@ -22,28 +22,29 @@
 				Origin: <input type="text" id="animation-origin" />
 				Frame Delay(ms): <input type="text" id="animation-framedelay" value="100"/>
 				Loop? <input type="checkbox" id="animation-loop" />				
-				<br />
-				<input id="animate" type="submit" value="Preview" />
+				<br />				
 				<input id="save" type="submit" value="Save" />
 			</div>
-			<div id="animation-area"></div>
 			<div id="content">
 				<div id="left">
-					<div id="drop-area">
-						<canvas id="display" width="600" height="600"></canvas>						
-					</div>
-				</div>
-
-				<div id="right">
 					<div id="xml-drop-area">
 						Drop a .anim file here to load it
 					</div>
 					<h3>Current Animations:</h3>
 					<select id="animations" size="10">
 					</select>
+					<h3>Preview:</h3>
+					<canvas id="animation-area" width="64" height="64"></canvas>
 					<h3>Frames for Selected Animation:</h3>
 					<select id="animation-frames" size="10">
 					</select>
+				</div>
+
+				<div id="right">
+					<div id="drop-area">
+						<canvas id="display" width="600" height="600"></canvas>						
+					</div>
+
 				</div>
 			</div>
 			

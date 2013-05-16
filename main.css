@@ -11,12 +11,12 @@
 
 #left {
 	float:left;
-	width: 69%;
+	width:30%;
 }
 
 #right {
 	float:right;
-	width:30%;
+	width:69%;
 }
 
 #xml-drop-area {
@@ -93,6 +93,7 @@ input {
 
 #animation-area {
 	margin: 0 auto;
+	border: 1px solid #000000;
 }
 
 #drop-area {

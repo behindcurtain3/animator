@@ -2,6 +2,8 @@ $(document).ready(function() {
 	var currentFile = null;
 	var selectedAnimation = null;
 	var img = new Image();
+	var animating = 0;
+	var animationFrame = 0;
 
 	$("#animations").change(function() {
 		// Called when a new animation is selected from the list
@@ -26,6 +28,7 @@ $(document).ready(function() {
 		(anim.spritesheet != null) ? $("#animation-spritesheet").val(anim.spritesheet.value) : $("#animation-spritesheet").val("");
 		(anim.framedelay != null) ? $("#animation-framedelay").val(anim.framedelay.value) : $("#animation-framedelay").val("");
 		(anim.origin != null) ? $("#animation-origin").val(anim.origin.value) : $("#animation-origin").val("");
+		(anim.loop != null) ? $("#animation-loop").prop('checked', anim.loop) : $("#animation-loop").prop('checked', true);
 		
 		// Set the selected animation
 		selectedAnimation = anim;
@@ -36,6 +39,8 @@ $(document).ready(function() {
 		
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.drawImage(img , 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+		
+		clearInterval(animating);
 	});
 
 	$("#animation-frames").change(function() {
@@ -51,6 +56,8 @@ $(document).ready(function() {
 		var frame = selectedAnimation.frames[$(this).val()];
 		
 		ctx.strokeRect(frame.x, frame.y, frame.width, frame.height);
+		
+		clearInterval(animating);
 	});
 	
 	// Setup default img
@@ -72,16 +79,11 @@ $(document).ready(function() {
 	} 
 	
 	function onXmlDrop(e) {
-		console.log(e.originalEvent);
-	
 		e.stopPropagation(); 
 		e.preventDefault(); 
 
-		var readFileSize = 0; 
 		var files = e.originalEvent.dataTransfer.files;
-
 		var file = files[0]; 
-		readFileSize += file.fileSize; 		
 		
 		var reader = new FileReader(); 
 		
@@ -98,7 +100,120 @@ $(document).ready(function() {
 		})(file); 
 
 		reader.readAsText(file); 
+		
+		clearInterval(animating);
 	}
+	
+	
+	$("#animation-area").click(function(e) {
+		if(currentFile == null || selectedAnimation == null)
+			return;
+			
+		if(animating != 0) {
+			clearInterval(animating);
+			animating = 0;
+			return;
+		}
+		
+		e.preventDefault();
+		clearInterval(animating);
+		
+		animationFrame = 0;		
+		animating = setInterval(function() {
+			var anim = currentFile.animations[$("#animations").val()];
+			
+			if(animationFrame >= anim.frames.length) {
+				if(anim.loop)
+					animationFrame = 0;
+				else
+				{
+					clearInterval(animating);
+					return;
+				}
+			}
+				
+			var frame = anim.frames[animationFrame];
+			console.log(frame);
+			
+			//$('#animation-area').css('width', frame.width + 'px');
+			//$('#animation-area').css('height', frame.height + 'px');			
+			
+			animationFrame++;
+			
+			var canvas = $("#display").get(0);
+			var ctx = canvas.getContext('2d');
+			
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			ctx.drawImage(img , 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+			ctx.strokeRect(frame.x, frame.y, frame.width, frame.height);
+			
+			canvas = $("#animation-area").get(0);
+			ctx = canvas.getContext('2d');
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			ctx.drawImage(img , frame.x, frame.y, frame.width, frame.height, 0, 0, frame.width, frame.height);
+			
+		}, $("#animation-framedelay").val());
+		/*
+		
+		clearInterval(animating);
+		framesX = $('#frames-X').val();
+		framesY = $('#frames-Y').val();
+		frameWidth = $('#dropbox').width() / framesX;
+		frameHeight = $('#dropbox').height() / framesY;
+		
+		$('#animation-area').css('width', frameWidth + 'px');
+		$('#animation-area').css('height', frameHeight + 'px');
+		$('#animation-area').css('background-image', 'url(' + img.src + ')');
+		
+		bpx = 0;
+		bpy = 0;
+		
+		frames = JSON.parse('{"frames":[' + $('#frames').val() +']}').frames;
+		
+		count = 0;
+		
+		if( frames.length > 2 ) {
+		
+			animating = setInterval(function(){
+				
+				if( count++ >= frames.length ) count = 0;
+				
+				bpx = -(frames[count] % framesX) * frameWidth;
+				bpy = -((frames[count] / framesX)|0) * frameHeight;
+
+				$('#animation-area').css('background-position', bpx + 'px ' + bpy + 'px' );
+			},$('#framedelay').val());
+		} else {
+		
+			if( frames.length == 2 ) {
+				startFrame = frames[0];
+				endFrame = frames[1];
+			} else if( frames.length < 2 ) {
+				startFrame = 0;
+				endFrame = framesX * framesY - 1;
+			} 
+
+			count = startFrame;
+			bpx = -(count % framesX) * frameWidth;
+			bpy = -((count / framesX)|0) * frameHeight;	
+			
+			$('#animation-area').css('background-position', bpx + 'px ' + bpy + 'px' );
+			
+			animating = setInterval(function(){
+				
+				if( count++ >= endFrame ) {
+					count = startFrame;
+				};
+				
+				bpx = -(count % framesX) * frameWidth;
+				bpy = -((count / framesX)|0) * frameHeight;				
+
+				$('#animation-area').css('background-position', bpx + 'px ' + bpy + 'px' );
+			},$('#interval').val());
+
+		} 
+		*/
+	});
 });
 
 (function() {

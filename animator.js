@@ -23,8 +23,6 @@ Animations.prototype = {
 			
 			$("#animations").append('<option value=\"' + i + '\">' + anim.state.value + ' [' + anim.group.value + ']</option>');
 		}
-		
-		console.log(this.animations);
 	}
 }
 
@@ -43,7 +41,9 @@ Animation.prototype = {
 	load: function(xmlNode) {
 		this.state = xmlNode.getAttributeNode("State");
 		this.group = xmlNode.getAttributeNode("Group");
-		this.loop = xmlNode.getAttributeNode("Loop");
+		
+		var loop = xmlNode.getAttributeNode("Loop").textContent;
+		this.loop = (loop == "True") ? true : false;
 		this.spritesheet = xmlNode.getAttributeNode("SpriteSheet");
 		this.layer = xmlNode.getAttributeNode("Layer");
 		this.framedelay = xmlNode.getAttributeNode("FrameDelay");
