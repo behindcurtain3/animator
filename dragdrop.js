@@ -124,10 +124,8 @@ $(document).ready(function() {
 		
 		animationFrame = 0;		
 		animating = setInterval(function() {
-			var anim = currentFile.animations[$("#animations").val()];
-			
-			if(animationFrame >= anim.frames.length) {
-				if(anim.loop)
+			if(animationFrame >= selectedAnimation.frames.length) {
+				if(selectedAnimation.loop)
 					animationFrame = 0;
 				else
 				{
@@ -136,7 +134,7 @@ $(document).ready(function() {
 				}
 			}
 				
-			var frame = anim.frames[animationFrame];
+			var frame = selectedAnimation.frames[animationFrame];
 			animationFrame++;
 			var canvas = $("#display").get(0);
 			var ctx = canvas.getContext('2d');

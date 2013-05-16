@@ -5,7 +5,7 @@
 	<body>
 		<div id="content">
 			<h1 id="title">
-				Animator <small>An HTML5 sprite sheet animator</small>
+				.anim[ator] <small>An HTML5 sprite sheet animator</small>
 			</h1>
 			<p> 
 				Drag & drop a sprite sheet onto the space below, set the total number of frames in the X and Y direction, and then click animate!  If you would like to animate a specific set of frames, you can do so using the frames field in two ways; note that frames are counted from 0, starting in the top left hand corner.  If, for example, you would like to start the animation on frame 0 and end on frame 2: write 0,2 in the frames field.  If you would like to animate frame 0, then frame 1, then frame 2, and then frame 1 again: write 0,1,2,1 in the frames field.  If the frames field is left blank, then the entire sprite sheet will be animated.
@@ -13,29 +13,35 @@
 					This demo uses a couple of HTML5 APIs, and it is only compatible with modern browsers.
 				</em>
 			</p>
-			<div id="parameters">
-				Spritesheet: <input type="text" id="animation-spritesheet" />
-				State: <input type="text" id="animation-state" />
-				Group: <input type="text" id="animation-group" />				
-				<br />
-				Layer: <input type="text" id="animation-layer" />								
-				Origin: <input type="text" id="animation-origin" />
-				Frame Delay(ms): <input type="text" id="animation-framedelay" value="100"/>
-				Loop? <input type="checkbox" id="animation-loop" />				
-				<br />				
-				<input id="save" type="submit" value="Save" />
-			</div>
+			<div id="content-parameters">
+				<div id="left-parameters">
+					<div id="parameters">
+						<h3>Animation Properties</h3>
+						Spritesheet: <input type="text" id="animation-spritesheet" />
+						State: <input type="text" id="animation-state" />
+						Group: <input type="text" id="animation-group" />				
+						<br />
+						Layer: <input type="text" id="animation-layer" />								
+						Origin: <input type="text" id="animation-origin" />
+						Frame Delay(ms): <input type="text" id="animation-framedelay" value="100"/>
+						Loop? <input type="checkbox" id="animation-loop" />				
+						<br />				
+					</div>
+				</div>
+				<div id="right-parameters">
+					<h3>Animation Preview</h3>
+					<canvas id="animation-area" width="64" height="64"></canvas>
+				</div>
+			</div>			
 			<div id="content">
 				<div id="left">
 					<div id="xml-drop-area">
 						Drop a .anim file here to load it
 					</div>
-					<h3>Current Animations:</h3>
+					<h3>Current Animations</h3>
 					<select id="animations" size="10">
-					</select>
-					<h3>Preview:</h3>
-					<canvas id="animation-area" width="64" height="64"></canvas>
-					<h3>Frames for Selected Animation:</h3>
+					</select>					
+					<h3>Frames for Selected Animation</h3>
 					<select id="animation-frames" size="10">
 					</select>
 				</div>
