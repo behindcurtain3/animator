@@ -1,10 +1,63 @@
 $(document).ready(function() {
-	var ctx = $('#display').get(0).getContext('2d');
+	var currentFile = null;
+	var selectedAnimation = null;
+	var img = new Image();
+
+	$("#animations").change(function() {
+		// Called when a new animation is selected from the list
+		if(currentFile == null)		
+			return;
+			
+		// Update the frame list
+		var index = $(this).val();
+		var anim = currentFile.animations[index];
+		
+		$("#animation-frames").html("");
+		for(var i = 0; i < anim.frames.length; i++) {
+			var f = anim.frames[i];
+			$("#animation-frames").append('<option value=\"' + i + '\">[' + i + '] ' + f.x + ', ' + f.y + ', ' + f.width + ', ' + f.height + '</option>');
+		}
+		
+		// Update the other UI elements	
+		// TODO: read loop value
+		(anim.state != null) ? $("#animation-state").val(anim.state.value) : $("#animation-state").val("");
+		(anim.group != null) ? $("#animation-group").val(anim.group.value) : $("#animation-group").val("");
+		(anim.layer != null) ? $("#animation-layer").val(anim.layer.value) : $("#animation-layer").val("");
+		(anim.spritesheet != null) ? $("#animation-spritesheet").val(anim.spritesheet.value) : $("#animation-spritesheet").val("");
+		(anim.framedelay != null) ? $("#animation-framedelay").val(anim.framedelay.value) : $("#animation-framedelay").val("");
+		(anim.origin != null) ? $("#animation-origin").val(anim.origin.value) : $("#animation-origin").val("");
+		
+		// Set the selected animation
+		selectedAnimation = anim;
+		
+		// Clear the canvas to only show the sprite sheet
+		var canvas = $("#display").get(0);
+		var ctx = canvas.getContext('2d');
+		
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.drawImage(img , 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+	});
+
+	$("#animation-frames").change(function() {
+		if(selectedAnimation == null)
+			return;
+			
+		var canvas = $("#display").get(0);
+		var ctx = canvas.getContext('2d');
+		
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.drawImage(img , 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+		
+		var frame = selectedAnimation.frames[$(this).val()];
+		
+		ctx.strokeRect(frame.x, frame.y, frame.width, frame.height);
+	});
 	
-	var img = new Image();   // Create new img element  
+	// Setup default img
     img.onload = function(){  
 		$('#display').attr('width', img.width);
 		$('#display').attr('height', img.height);
+		var ctx = $('#display').get(0).getContext('2d');
 		ctx.drawImage(img , 0, 0, img.width, img.height, 0, 0, img.width, img.height);
     };  
     img.src = 'default.png'; // Set source path  	
@@ -39,8 +92,8 @@ $(document).ready(function() {
 		reader.onload = (function(aFile) { 
 			return function(evt) { 
 				var canvas = $('#display').get(0);
-				var animations = new Animations(canvas);
-				animations.load(evt.target.result);
+				currentFile = new Animations(canvas);
+				currentFile.load(evt.target.result);
 			} 
 		})(file); 
 
