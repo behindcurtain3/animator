@@ -32,6 +32,7 @@
 
 #animation-frames {
 	width: 100%;
+	multiple: false; 
 }
 
 #animation-spritesheet {
